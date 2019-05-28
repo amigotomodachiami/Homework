@@ -1,5 +1,5 @@
 ---
-title: "WailunChung_Assignment3"
+title: "Wailun_Chung_Assignment3"
 author: "Wailun Chung"
 date: "5/27/2019"
 output: html_document
@@ -14,6 +14,7 @@ Using Git, clone the following GitHub repository to your local machine: https://
 
 ## 2.	Data Summary (20 points): 
 From this aforementioned cloned repo, please extract titanic.csv.zip.  To be clear, this does not have to be done in Git or command line. <br />
+
 a.	In R, please read in titanic.csv via either read.table() or read.csv(), assigning it to df.  This dataset follows the passengers aboard the Titanic, including their fees paid, rooms rented, and survivorship status.<br />
 
 ```{r}
