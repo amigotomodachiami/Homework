@@ -5,16 +5,16 @@ date: "5/27/2019"
 output: html_document
 ---
 
-#Questions:
+# Questions:
 
-##1. GitHub Cloning (20 points): 
-Using Git, clone the following GitHub repository to your local machine: https://github.com/caesar0301/awesome-public-datasets.  
+## 1. GitHub Cloning (20 points): 
+Using Git, clone the following GitHub repository to your local machine: https://github.com/caesar0301/awesome-public-datasets.  <br />
 
-This is done by cloning in UI. 
+<span style="color:red">This is done by cloning in UI.</span><br />
 
 ## 2.	Data Summary (20 points): 
-From this aforementioned cloned repo, please extract titanic.csv.zip.  To be clear, this does not have to be done in Git or command line.  
-a.	In R, please read in titanic.csv via either read.table() or read.csv(), assigning it to df.  This dataset follows the passengers aboard the Titanic, including their fees paid, rooms rented, and survivorship status.
+From this aforementioned cloned repo, please extract titanic.csv.zip.  To be clear, this does not have to be done in Git or command line. <br />
+a.	In R, please read in titanic.csv via either read.table() or read.csv(), assigning it to df.  This dataset follows the passengers aboard the Titanic, including their fees paid, rooms rented, and survivorship status.<br />
 
 ```{r}
 # 2a. unzip the file from my local repository and move file to my homework folder
@@ -24,15 +24,15 @@ unzip(zipF,exdir=outDir)
 df = read.csv(paste(outDir,"/titanic.csv",sep=""))
 ```
 
-b.	Output the respective count of females and males aboard the Titanic. Plot the frequency of females and males.  Be sure to give an accurate title and label the axes.
+b.	Output the respective count of females and males aboard the Titanic. Plot the frequency of females and males.  Be sure to give an accurate title and label the axes.<br />
 
 ```{r}
 # 2b. Simple Bar Plot with count of female and males
 counts <- table(df$Sex)
-barplot(counts, main="Count of Female and Males Aboard the Titanic", xlab="Sex")
+barplot(counts, main="Count of Female and Males Aboard the Titanic", ylim=c(0,650),xlab="Sex")
 ```
 
-c.	Please use one apply function (to review: swirl() modules 11, 12) to output the means of Age, Fare, and Survival.  Make sure the output is a real number for all three means.
+c.	Please use one apply function (to review: swirl() modules 11, 12) to output the means of Age, Fare, and Survival.  Make sure the output is a real number for all three means.<br />
 
 ```{r}
 # 2c. print mean of age, fare and survial.
@@ -40,8 +40,9 @@ df2 <- data.frame(df$Age, df$Fare,df$Survived)
 sapply(df2, mean, na.rm = T) 
 ```
 
-##3.	Function Building (30 points): 
-You research sleep and just got your first data set.  Later, you’ll have another dataset with the same column names, so you want to create a helper function that you can analyze this dataset and the next.  Load sleep_data_01.csv (found at http://talklab.psy.gla.ac.uk/L1_labs/lab_1/homework/index.html).  Questions 3A through 3D should be answered in function(x){}.  3E can be outside of the function. 
+## 3.	Function Building (30 points): 
+You research sleep and just got your first data set.  Later, you’ll have another dataset with the same column names, so you want to create a helper function that you can analyze this dataset and the next.  Load sleep_data_01.csv (found at http://talklab.psy.gla.ac.uk/L1_labs/lab_1/homework/index.html).  Questions 3A through 3D should be answered in function(x){}.  3E can be outside of the function. <br />
+<span style="color:red">The function code will be in 3e answer! </span>
 
 ```{r}
 # 3 load data from internet
@@ -50,7 +51,7 @@ sleep <- getURL("http://talklab.psy.gla.ac.uk/L1_labs/lab_1/homework/sleep_data_
 sleepdata <- read.csv(textConnection(sleep),header=T)
 ```
 
-a.	Create objects for the median Age, the minimum and maximum Duration of sleep, and the mean and standard deviation of the Rosenberg Self Esteem scale (RSES).  You may need to specify a few options like in Problem 2 and live session.
+a.	Create objects for the median Age, the minimum and maximum Duration of sleep, and the mean and standard deviation of the Rosenberg Self Esteem scale (RSES).  You may need to specify a few options like in Problem 2 and live session.<br />
 
 ```{r}
 # 3a create objects for 
@@ -62,7 +63,7 @@ SelfEsteem <- mean(sleepdata$RSES, na.rm=T)
 SE_SD <- sd(sleepdata$RSES, na.rm=T)
 ```
 
-b.	Create a data.frame object called report: it should consist of the median age, the RSES mean and standard deviation respectively divided by five (since there are five questions and these scores are summed), and the range of Duration (the statistical definition of range; it should be a single number.)
+b.	Create a data.frame object called report: it should consist of the median age, the RSES mean and standard deviation respectively divided by five (since there are five questions and these scores are summed), and the range of Duration (the statistical definition of range; it should be a single number.)<br />
 
 ```{r}
 # 3b find range and create dataframe 
@@ -70,72 +71,97 @@ Dur_Range <- (Max_Dur - Min_Dur)
 report <- data.frame("MedianAge"=MedianAge,"SelfEsteem"=SelfEsteem, "SE_SD" = SE_SD/5,"DurationRange" = Dur_Range)
 ```
 
-c.	Change the column names of this data.frame to MedianAge, SelfEsteem, SE_SD, and DurationRange.
+c.	Change the column names of this data.frame to MedianAge, SelfEsteem, SE_SD, and DurationRange.<br />
 ```{r}
 # 3c name columns as specified. 3b done from 3b already
 Dur_Range <- (Max_Dur - Min_Dur)
 report <- data.frame("MedianAge"=MedianAge,"SelfEsteem"=SelfEsteem, "SE_SD" = SE_SD/5,"DurationRange" = Dur_Range)
 ```
 
-d.	Round the report to at most 2 digits: leave this as the closing line to the function.
+d.	Round the report to at most 2 digits: leave this as the closing line to the function.<br />
 ```{r}
 # 3d round to 2 decimal
 report = round(report, digits=2)
 ```
 
-e.	Finally, run the function on your sleep data to show the output.
+e.	Finally, run the function on your sleep data to show the output.<br />
+```{r}
+# 3 
+# create a function to read sleep data from internet and return a report data frame with basic statistic
+# input: sleep data dataframe, data is from internet with static url
+# output: a data Frame
+library(RCurl)
+sleep <- getURL("http://talklab.psy.gla.ac.uk/L1_labs/lab_1/homework/sleep_data_01.csv")
+sleepdata <- read.csv(textConnection(sleep),header=T)
+report_sleep_data <- function(x){
+  # 3a create objects for 
+  # median Age, min dur of age, max dur of age, mean RSES, sd RSES
+  MedianAge <- median(sleepdata$Age, na.rm=T)
+  Min_Dur <- min(sleepdata$Duration, na.rm=T)
+  Max_Dur <- max(sleepdata$Duration, na.rm=T)
+  SelfEsteem <- mean(sleepdata$RSES, na.rm=T)
+  SE_SD <- sd(sleepdata$RSES, na.rm=T)
+  Dur_Range <- (Max_Dur - Min_Dur)
+  report <- data.frame("MedianAge"=MedianAge,"SelfEsteem"=SelfEsteem, "SE_SD" = SE_SD/5,"DurationRange" = Dur_Range)
+  # 3d round to 2 decimal
+  report = round(report, digits=2)
+  return(report)
+}
+report = report_sleep_data(sleepdata)
+report
+```
 
-##4.	FiveThirtyEight Data (30 points): 
-Navigate on GitHub to https://github.com/rudeboybert/fivethirtyeight and read README.md. It will include everything you need. 
+## 4.	FiveThirtyEight Data (30 points): 
+Navigate on GitHub to https://github.com/rudeboybert/fivethirtyeight and read README.md. It will include everything you need. <br />
 
-a.	Install the fivethirtyeight package.
+a.	Install the fivethirtyeight package.<br />
 ```{r}
 #4a install package
-install.packages("fivethirtyeight")
+#install.packages("fivethirtyeight")
 ```
-b.	In the listing of Data sets in package ‘fivethirtyeight,’ assign the 22nd data set to an object ‘df.’
+b.	In the listing of Data sets in package ‘fivethirtyeight,’ assign the 22nd data set to an object ‘df.’<br />
 ```{r}
 #4b use library and assign df
 library(fivethirtyeight)
 df <- college_recent_grads
 ```
-c.	Use a more detailed list of the data sets to write out the URL in a comment to the related news story.
+c.	Use a more detailed list of the data sets to write out the URL in a comment to the related news story.<br />
 ```{r}
 vignette("fivethirtyeight", package = "fivethirtyeight")
 #related news story's URL:
 #http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
 ```
 
-d.	Using R command(s), give the dimensions and column names of this data frame.
+d.	Using R command(s), give the dimensions and column names of this data frame.<br />
 ```{r}
 #4d get dimensions and column names
 dim(df)
 colnames(df)
 ```
 
-##5.	Data Summary (30 points): 
+## 5.	Data Summary (30 points): 
 Use your newly assigned data frame from question 4 for this question. 
-a.	Write an R command that gives you the column names of the data frame.  Right after that, write one that counts the number of columns but not rows.  Hint: The number should match one of your numbers in Question 1d for dimensions.
+a.	Write an R command that gives you the column names of the data frame.  Right after that, write one that counts the number of columns but not rows.  Hint: The number should match one of your numbers in Question 1d for dimensions.<br />
 ```{r}
 #5a get number of columns (column only)
 dim(df)
 ncol(df)
 ```
-b.	Generate a count of each unique major_category in the data frame.  I recommend using libraries to help.  To be clear, this should look like a matrix or data frame containing the major_category and the frequency it occurs in the dataset.  Assign it to major_count.
+b.	Generate a count of each unique major_category in the data frame.  I recommend using libraries to help.  To be clear, this should look like a matrix or data frame containing the major_category and the frequency it occurs in the dataset.  Assign it to major_count.<br />
 ```{r}
 #5b generate count table of major category
 library(plyr)
 major_count <- count(df,"major_category")
 ```
 
-c.	To make things easier to read, put par(las=2) before your plot to make the text perpendicular to the axis.  Make a barplot of major_count.  Make sure to label the title with something informative (check the vignette if you need), label the x and y axis, and make it any color other than grey.  Assign the major_category labels to their respective bar.  Flip the barplot horizontally so that bars extend to the right, not upward.  All of these options can be done in a single pass of barplot(). Note: It’s okay if it’s wider than the preview pane.
+c.	To make things easier to read, put par(las=2) before your plot to make the text perpendicular to the axis.  Make a barplot of major_count.  Make sure to label the title with something informative (check the vignette if you need), label the x and y axis, and make it any color other than grey.  Assign the major_category labels to their respective bar.  Flip the barplot horizontally so that bars extend to the right, not upward.  All of these options can be done in a single pass of barplot(). Note: It’s okay if it’s wider than the preview pane.<br />
 ```{r}
 #5c plot horizontal bar graph
-par(las=2) 
-barplot(major_count$freq,main="Major Category Count",col="blue",horiz=TRUE,names.arg=major_count$major_category,xlab="major count",ylab="major category",xlim=c(0,30))
+par(las=2,mar=c(4,15,4,2)) 
+barplot(major_count$freq,main="Major Category Count",col="blue",horiz=TRUE,names.arg=major_count$major_category,xlab="major count",xlim=c(0,30))
 ```
 
-d.	Write the fivethirtyeight data to a csv file.  Make sure that it does not have row labels.
+d.	Write the fivethirtyeight data to a csv file.  Make sure that it does not have row labels.<br />
 ```{r}
 #5d writer the freq table to csv
 write.table(major_count,file="/Users/wailunchung/Documents/SMU/MSDS6306_Doing_Data_Science/homeworks/W3/major_count.csv" ,sep=",",row.names=FALSE,col.names=TRUE)
@@ -143,37 +169,20 @@ write.table(major_count,file="/Users/wailunchung/Documents/SMU/MSDS6306_Doing_Da
 write.table(df,file="/Users/wailunchung/Documents/SMU/MSDS6306_Doing_Data_Science/homeworks/W3/college_recent_grads.csv" ,sep=",",row.names=FALSE,col.names=TRUE)
 ```
 
-##6.	Codebook (30 points): 
-a.	Start a new repository on GitHub for your SMU MSDS homework.  On your local device, make sure there is a directory for Homework at the minimum; you are welcome to add whatever you would like to this repo in addition to your requirements here.
-In RStudio, create a new depository with github. 
-b.	Create a README.md file which explains the purpose of the repository, the topics included, the sources for the material you post, and contact information in case of questions. Remember, the one in the root directory should be general.  You are welcome to make short READMEs for each assignment individually in other folders.
-c.	In one (or more) of the nested directories, post your RMarkdown script, HTML file, and data from ‘fivethirtyeight.’  Make sure that in your README or elsewhere that you credit fivethirtyeight in some way.
-d.	In your RMarkdown script, please provide the link to this GitHub so the grader can see it.
+## 6.	Codebook (30 points): 
+a.	Start a new repository on GitHub for your SMU MSDS homework.  On your local device, make sure there is a directory for Homework at the minimum; you are welcome to add whatever you would like to this repo in addition to your requirements here. <br />
+<span style="color:red">In RStudio, create a new depository with github. Then, goto github account and clone the depository and set it to public. </span><br />
+
+b.	Create a README.md file which explains the purpose of the repository, the topics included, the sources for the material you post, and contact information in case of questions. Remember, the one in the root directory should be general.  You are welcome to make short READMEs for each assignment individually in other folders.<br />
+<span style="color:red">See homework repository ReadMe.md file </span><br />
+
+c.	In one (or more) of the nested directories, post your RMarkdown script, HTML file, and data from ‘fivethirtyeight.’  Make sure that in your README or elsewhere that you credit fivethirtyeight in some way.<br />
+<span style="color:red">files are loaded to the Homework/Week3/ folder.</span><br />
+
+d.	In your RMarkdown script, please provide the link to this GitHub so the grader can see it.<br />
+<span style="color:red">The link of my GitHub depository:<br />
+https://github.com/amigotomodachiami/Homework.git </span><br />
 
 
 
 
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
