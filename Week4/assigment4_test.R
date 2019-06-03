@@ -62,7 +62,7 @@ player_stats$Position <- as.factor(player_stats$Position)
 sapply(player_stats, class)
 
 #2D plot
-par(las=2,mar=c(11,10,5,3),mgp=c(2,1,0)) 
+
 #barplot(player_stats$'FG%',main="SA Spurs 18-19 Field Goal Percentage",col="blue",names.arg=player_stats$Name,xlab="Player",ylab="FG%",ylim=c(0,100))
 #freq table
 position_freq <- count(player_stats$Position)
@@ -70,11 +70,15 @@ position_freq <- count(player_stats$Position)
 number_of_position <- nrow(position_freq)
 #rainbow color
 mycolor <- rainbow(number_of_position)
-par(las=2)
-barplot(player_stats$'FG%',main="SA Spurs 18-19 Field Goal Percentage",col=mycolor[player_stats$Position],names.arg=player_stats$Name,xlab="Player",ylab="FG%",ylim=c(0,100))
+#par(las=2,mar=c(11,4,4,2),mgp=c(9,1,0)) 
+par(las=2,mar=c(11,4,4,2))
+barplot(player_stats$'FG%',main="SA Spurs 18-19 Field Goal Percentage",col=mycolor[player_stats$Position],names.arg=player_stats$Name,ylim=c(0,100))
+title(ylab = "FG%", mgp = c(3, 1, 0))
+title(xlab = "Player", mgp = c(9, 1, 0))
 #custom color with static number of position of 5
 colortest <- c("blue","red","yellow","green","grey")
-barplot(player_stats$'FG%',main="SA Spurs 18-19 Field Goal Percentage",col=colortest[player_stats$Position],names.arg=player_stats$Name,xlab="Player",ylab="FG%",ylim=c(0,100))
+
+barplot(player_stats$'FG%',main="SA Spurs 18-19 Field Goal Percentage",col=colortest[player_stats$Position],names.arg=player_stats$Name,ylim=c(0,100))
 
 colortest[1]
 
