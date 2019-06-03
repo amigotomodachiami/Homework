@@ -56,9 +56,35 @@ ncol(df)
 library(plyr)
 major_count <- count(df,"major_category")
 #5c
-par(las=2) 
-barplot(major_count$freq,main="Major Category Count",col="blue",horiz=TRUE,names.arg=major_count$major_category,xlab="major count",ylab="major category",xlim=c(0,30))
+par(las=2,mar=c(4,15,4,2)) 
+barplot(major_count$freq,main="Major Category Count",col="blue",horiz=TRUE,names.arg=major_count$major_category,xlab="major count",xlim=c(0,30))
 #5d
 write.table(major_count,file="/Users/wailunchung/Documents/SMU/MSDS6306_Doing_Data_Science/homeworks/W3/major_count.csv" ,sep=",",row.names=FALSE,col.names=TRUE)
 
 #6a
+# no code
+
+# 3 
+# create a function to read sleep data from internet and return a report data frame with basic statistic
+# input: sleep data dataframe, data is from internet with static url
+# output: a data Frame
+library(RCurl)
+sleep <- getURL("http://talklab.psy.gla.ac.uk/L1_labs/lab_1/homework/sleep_data_01.csv")
+sleepdata <- read.csv(textConnection(sleep),header=T)
+report_sleep_data <- function(x){
+  # 3a create objects for 
+  # median Age, min dur of age, max dur of age, mean RSES, sd RSES
+  MedianAge <- median(sleepdata$Age, na.rm=T)
+  Min_Dur <- min(sleepdata$Duration, na.rm=T)
+  Max_Dur <- max(sleepdata$Duration, na.rm=T)
+  SelfEsteem <- mean(sleepdata$RSES, na.rm=T)
+  SE_SD <- sd(sleepdata$RSES, na.rm=T)
+  Dur_Range <- (Max_Dur - Min_Dur)
+  report <- data.frame("MedianAge"=MedianAge,"SelfEsteem"=SelfEsteem, "SE_SD" = SE_SD/5,"DurationRange" = Dur_Range)
+  # 3d round to 2 decimal
+  report = round(report, digits=2)
+  return(report)
+}
+report = report_sleep_data(sleepdata)
+report
+

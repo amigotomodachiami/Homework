@@ -1,0 +1,122 @@
+---
+title: "Unit4_assignment"
+author: "Wailun Chung"
+date: "6/3/2019"
+output: html_document
+---
+
+#  Questions 
+
+## 1. Harry Potter Cast (50%) 
+	a. In the IMDB, there are listings of full cast members for movies. Navigate to http://www.imdb.com/title/tt1201607/fullcredits?ref_=tt_ql_1. Feel free to View Source to get a good idea of what the page looks like in code. 
+
+```{r}
+library(XML)
+library(dplyr)
+library(tidyr)
+library(stringi)
+library(rvest)
+library(ggplot2)
+library(RCurl)
+library(WDI)
+library(plyr)
+```
+	
+	b. Scrape the page with any R package that makes things easy for you. Of particular interest is the table of the Cast in order of crediting. Please scrape this table (you might have to fish it out of several of the tables from the page) and make it a data.frame() of the Cast in your R environment 
+	
+```{r}
+#1A / 1B
+hp<-read_html("http://www.imdb.com/title/tt1201607/fullcredits?ref_=tt_ql_1")
+hp_table<-html_nodes(hp,"table")
+derp<-html_table(hp_table)
+```
+	
+	c. Clean up the table
+	• It should not have blank observations or rows, a row that should be column names, or just ‘…’ 
+	• It should have intuitive column names (ideally 2 to start – Actor and Character) 
+	• In the film, Mr. Warwick plays two characters, which makes his row look a little weird. Please replace his character column with just “Griphook / Professor Filius Flitwick” to make it look better. 
+	• One row might result in “Rest of cast listed alphabetically” – remove this observation. 
+
+```{r}
+#1C - Cleaning
+a<-data.frame(derp[3])
+names(a) <- c("Blank", "Actor", "Blank2","Character")
+df<-a[2:length(a$Actor),c("Actor", "Character")]
+df$Character[10] <- "Griphook / Professor Filius Flitwick"
+```
+	
+	d. Split the Actor’s name into two columns: FirstName and Surname. Keep in mind that some actors/actresses have middle names as well. Please make sure that the middle names are in the FirstName column, in addition to the first name (example: given the Actor Frank Jeffrey Stevenson, the FirstName column would say “Frank Jeffrey.”) 
+
+```{r}
+# 1D -Edit The Cast List
+b<-df %>%
+  slice(-92) %>% # Removes the row that is just noting the rest is alphabetical
+  separate(Actor, into=c("FirstNames", "Surname"), sep="[ ](?=[^ ]+$)") # Separates the Last Name
+```
+	
+	e. Present the first 10 rows of the data.frame() – It should have only FirstName, Surname, and Character columns. 
+
+```{r}
+head(b, 10)
+```
+
+## 2. SportsBall (50%)
+
+	a. On the ESPN website, there are statistics of each NBA player. Navigate to the San Antonio Spurs current statistics (likely http://www.espn.com/nba/team/stats/_/name/sa/san-antonio-spurs). You are interested in the Shooting Statistics table. 
+
+	b. Scrape the page with any R package that makes things easy for you. There are a few tables on the page, so make sure you are targeting specifically the Shooting Statistics table. 
+
+```{r}
+sas <-read_html("http://www.espn.com/nba/team/stats/_/name/sa/san-antonio-spurs")
+sas_table<-html_nodes(sas,"table")
+derp_sas<-html_table(sas_table, fill=TRUE)
+```
+	
+	c. Clean up the table (You might get some warnings if you’re working with tibbles)
+	• You’ll want to create an R data.frame() with one observation for each player. Make sure that you do not accidentally include blank rows, a row of column names, or the Totals row in the table as observations. 
+	• The column PLAYER has two variables of interest in it: the player’s name and their position, denoted by 1-2 letters after their name. Split the cells into two columns, one with Name and the other Position. 
+	• Check the data type of all columns. Convert relevant columns to numeric. Check the data type of all columns again to confirm that they have changed! 
+
+```{r}
+#2C Cleaning tables
+player_stats1 = derp_sas[[6]]
+player_stats2 = derp_sas[[8]] 
+
+player_stats = cbind(player_stats1,player_stats2)
+
+player_stats<-player_stats %>%
+  slice(-14) %>% # Removes the total row
+  separate(Name, into=c("Name", "Position"), sep="[ ](?=[^ ]+$)") #Separate the name and position
+
+player_stats<-player_stats[c("Name","Position","FG%")]
+player_stats$Position <- as.factor(player_stats$Position)
+str(player_stats)
+```
+	
+	d. Create a colorful bar chart that shows the Field Goals Percentage Per Game for each person. It will be graded on the following criteria.
+	• Informative Title, centered 
+	• Relevant x and y axis labels (not simply variables names!) 
+	• Human-readable axes with no overlap (you might have to flip x and y to fix that). Note: You do not have to convert the decimal to a percentage. 
+	• Color the columns by the team member’s position (so, all PF’s should have the same color, etc.) 
+
+```{r}
+#2D plot
+par(las=2,mar=c(11,4,4,2)) 
+#freq table
+position_freq <- count(player_stats$Position)
+#count number of position
+number_of_position <- nrow(position_freq)
+#rainbow color
+mycolor <- rainbow(number_of_position)
+barplot(player_stats$'FG%',main="SA Spurs 18-19 Field Goal Percentage",col=mycolor[player_stats$Position],names.arg=player_stats$Name,ylim=c(0,100))
+title(ylab="FG%", mgp=c(3, 1, 0))
+title(xlab="Player", mgp=c(9, 1, 0))
+#custom color with static number of position of 5
+colortest <- c("blue","red","yellow","green","grey")
+barplot(player_stats$'FG%',main="SA Spurs 18-19 Field Goal Percentage",col=colortest[player_stats$Position],names.arg=player_stats$Name,ylim=c(0,100))
+title(ylab="FG%", mgp=c(3, 1, 0))
+title(xlab="Player", mgp=c(9, 1, 0))
+
+```
+
+
