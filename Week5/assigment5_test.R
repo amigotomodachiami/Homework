@@ -44,7 +44,6 @@ head(final)
 final$total <- final$count_2015+final$count_2016
 head(final)
 #3b sort and find top 10
-#attach(final)
 newfinal <- final[order(-final$total),]
 head(newfinal,10)
 #3c suppress boys
@@ -57,5 +56,64 @@ head(girlfinal,20)
 write.table(girlfinal,file="top_10_popular_baby_girl_name.csv",sep=",",row.names=FALSE,col.names=TRUE)
 
 
+
+getwd()
+install.packages("downloader")
+library(downloader)
+download("https://raw.githubusercontent.com/thoughtfulbloke/faoexample/master/stability.csv", destfile="stability.csv")
+
+ao <- read.csv("appleorange.csv",stringsAsFactors=FALSE, header=FALSE)
+str(ao)
+
+openair
+
+## Using WDI package to access World Bank Development Indicators
+######################
+
+## Install and load package
+library(WDI)
+
+## Search for fertilizer consumption data
+WDIsearch("fertilizer consumption")
+
+## Use indicator number to gather data
+FertConsumpData <- WDI(indicator="AG.CON.FERT.ZS")
+
+## How many variables in the data set?
+## How many cases?
+## Download data using another indicator 
+## You can use a different search term if you like
+## Add the code to your makefile
+FertConsumpData
+
+#it only works for Windows because openair contains C++ code a compiler is also needed
+require(devtools)
+install_github('davidcarslaw/openair')
+library(openair)
+kc1 <- importAURN(site = "kc1", year = 2011:2012)
+head(kc1)
+sub <- selectByDate(kc1, day = "weekday", year = 2012, month = 6:9, hour = 7:19)
+head(sub)
+
+sub2 <- timeAverage(kc1, avg.time = "2 week")
+
+## Install and load package
+library(WDI)
+
+## Search for fertilizer consumption data
+WDIsearch("Stock market",field='name')
+
+## Use indicator number to gather data
+USStockData <- WDI(indicator="DSTKMKTXD",start = 2016)
+
+summary(USStockData)
+str(USStockData)
+head(USStockData, 20)
+## How many variables in the data set?
+## How many cases?
+## Download data using another indicator 
+## You can use a different search term if you like
+## Add the code to your makefile
+FertConsumpData
 
 
